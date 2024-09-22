@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pentagon Credit Union</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        header {
+            background: #004d00;
+            color: white;
+            padding: 15px 0;
+            text-align: center;
+        }
+        nav {
+            display: flex;
+            justify-content: center;
+            background: #003300;
+            padding: 10px 0;
+        }
+        nav a {
+            color: white;
+            padding: 10px 15px;
+            text-decoration: none;
+        }
+        nav a:hover {
+            background: #005700;
+        }
+        .hidden {
+            display: none;
+        }
+        footer {
+            text-align: center;
+            margin-top: 20px;
+            padding: 10px 0;
+            background: #004d00;
+            color: white;
+        }
+        .form-container {
+            margin: 20px 0;
+        }
+        .form-container input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .form-container button {
+            background: #004d00;
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+        }
+        .form-container button:hover {
+            background: #005700;
+        }
+        .service-card {
+            margin: 10px;
+            padding: 20px;
+            background: white;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            position: relative;
+        }
+        .popup {
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            display: none;
+        }
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            z-index: 500;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Welcome to Pentagon Credit Union</h1>
+    <p>Your trusted financial partner</p>
+</header>
+
+<nav>
+    <a href="#home">Home</a>
+    <a href="#about">About Us</a>
+    <a href="#contact">Contact</a>
+    <a href="#faq">FAQ</a>
+</nav>
+
+<section id="login">
+    <h2>Login to Your Account</h2>
+    <div class="form-container">
+        <input type="text" id="loginUsername" placeholder="Username" required>
+        <input type="password" id="loginPassword" placeholder="Password" required>
+        <button onclick="login()">Login</button>
+    </div>
+    <p id="loginMessage"></p>
+</section>
+
+<section id="userDashboard" class="hidden">
+    <h2>Your Dashboard</h2>
+    <p>Welcome back, <span id="usernameDisplay"></span>!</p>
+
+    <div class="service-list">
+        <h3>Our Services</h3>
+        <div class="service-card" onclick="showPopup('onlineBankingPopup')">Online Banking</div>
+        <div class="service-card" onclick="showPopup('loansPopup')">Loans</div>
+        <div class="service-card" onclick="showPopup('investmentPopup')">Investment Services</div>
+        <div class="service-card" onclick="showPopup('financialPlanningPopup')">Financial Planning</div>
+        <div class="service-card" onclick="showPopup('customerSupportPopup')">Customer Support</div>
+    </div>
+
+    <div class="service-card" onclick="toggleBalances()">View Account Balances</div>
+    <div id="accountBalances" class="hidden">
+        <p>Your account balances:</p>
+        <ul>
+            <li>Checking Account: $5,000</li>
+            <li>Savings Account: $15,000</li>
+        </ul>
+    </div>
+</section>
+
+<!-- Popups -->
+<div class="overlay" id="overlay" onclick="closePopups()"></div>
+<div class="popup" id="onlineBankingPopup">
+    <h3>Online Banking</h3>
+    <p>Access your accounts anytime, anywhere.</p>
+    <button onclick="closePopup('onlineBankingPopup')">Close</button>
+</div>
+<div class="popup" id="loansPopup">
+    <h3>Loans</h3>
+    <p>Competitive rates for personal and home loans.</p>
+    <button onclick="closePopup('loansPopup')">Close</button>
+</div>
+<div class="popup" id="investmentPopup">
+    <h3>Investment Services</h3>
+    <p>Grow your savings with expert advice.</p>
+    <button onclick="closePopup('investmentPopup')">Close</button>
+</div>
+<div class="popup" id="financialPlanningPopup">
+    <h3>Financial Planning</h3>
+    <p>Personalized strategies for your financial future.</p>
+    <button onclick="closePopup('financialPlanningPopup')">Close</button>
+</div>
+<div class="popup" id="customerSupportPopup">
+    <h3>Customer Support</h3>
+    <p>We're here to help 24/7.</p>
+    <button onclick="closePopup('customerSupportPopup')">Close</button>
+</div>
+
+<footer>
+    <p>&copy; 2024 Pentagon Credit Union. All rights reserved.</p>
+</footer>
+
+<script>
+    const hardcodedUser = {
+        username: "Macus33984",
+        password: "Marcusfrederick3398"
+    };
+
+    function login() {
+        const username = document.getElementById('loginUsername').value;
+        const password = document.getElementById('loginPassword').value;
+
+        if (username === hardcodedUser.username && password === hardcodedUser.password) {
+            document.getElementById('loginMessage').innerText = "Login successful!";
+            document.getElementById('userDashboard').classList.remove('hidden');
+            document.getElementById('login').classList.add('hidden');
+            document.getElementById('usernameDisplay').innerText = username;
+        } else {
+            document.getElementById('loginMessage').innerText = "Invalid username or password.";
+        }
+    }
+
+    function showPopup(popupId) {
+        document.getElementById('overlay').style.display = 'block';
+        document.getElementById(popupId).style.display = 'block';
+    }
+
+    function closePopup(popupId) {
+        document.getElementById('overlay').style.display = 'none';
+        document.getElementById(popupId).style.display = 'none';
+    }
+
+    function closePopups() {
+        const popups = document.querySelectorAll('.popup');
+        const overlay = document.getElementById('overlay');
+        popups.forEach(popup => popup.style.display = 'none');
+        overlay.style.display = 'none';
+    }
+
+    function toggleBalances() {
+        const balances = document.getElementById('accountBalances');
+        balances.classList.toggle('hidden');
+    }
+</script>
+
+</body>
+</html>
